@@ -1,23 +1,21 @@
-# Usar una imagen base con JDK 11 y Maven
 FROM maven:3.8.4-openjdk-17 AS build
 
-# Establecer un directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de tu proyecto al directorio de trabajo
-COPY . /app
+COPY pom.xml .
 
-# Ejecutar Maven para construir el proyecto
+RUN mvn dependency:go-offline
+
+COPY src ./src
+
 RUN mvn clean package -DskipTests
 
-# Crear una nueva imagen basada en OpenJDK 11
-FROM openjdk:17
+FROM openjdk:17-jdk-alpine
 
-# Exponer el puerto que utilizará la aplicación
+WORKDIR /app
+
+COPY --from=build /app/target/backing-service-0.0.1-SNAPSHOT.jar app.jar
+
 EXPOSE 8081
 
-# Copiar el archivo JAR construido desde la etapa anterior
-COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /app/demo-0.0.1-SNAPSHOT.jar
-
-# Establecer el punto de entrada para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "/app/demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
