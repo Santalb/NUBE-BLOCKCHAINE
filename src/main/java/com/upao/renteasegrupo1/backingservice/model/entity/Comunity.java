@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
-@Table(name = "community")
+@Table(name = "comunities")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,4 +23,7 @@ public class Comunity {
 
     @Column(name = "description", nullable = false, length = 255)
     private String description;
+
+    @ManyToMany(mappedBy = "comunities")
+    private List<User> users;
 }

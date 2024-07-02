@@ -3,54 +3,59 @@ package com.upao.renteasegrupo1.backingservice.controller;
 import com.upao.renteasegrupo1.backingservice.model.dto.UserRequestDTO;
 import com.upao.renteasegrupo1.backingservice.model.dto.UserResponseDTO;
 import com.upao.renteasegrupo1.backingservice.model.entity.User;
+import com.upao.renteasegrupo1.backingservice.security.LoginRequest;
+import com.upao.renteasegrupo1.backingservice.security.TokenResponse;
 import com.upao.renteasegrupo1.backingservice.service.UserService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
-//Link work use Postman: http://localhost:8081/users
 @RestController
 @RequestMapping("/users")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin("*")
-
 public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<UserResponseDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        userService.createUser(userRequestDTO);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Usuario registrado");
-        return ResponseEntity.ok(response);
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TokenResponse> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        TokenResponse token = userService.createUser(userRequestDTO);
+        return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@Valid @RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
-
-        userService.validateLoginRequest(username, password);
-
-        User user = userService.findByUsername(username).orElseThrow();
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Bienvenido " + username);
-        response.put("role", user.getRole().name());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TokenResponse> loginUser(@Valid @RequestBody LoginRequest request) {
+        TokenResponse token = userService.login(request);
+        return ResponseEntity.ok(token);
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
+        UserResponseDTO user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

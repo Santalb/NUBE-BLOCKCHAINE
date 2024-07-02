@@ -23,6 +23,7 @@ public class CommunityMapper {
         communityResponseDTO.setId(community.getId());
         communityResponseDTO.setName(community.getName());
         communityResponseDTO.setDescription(community.getDescription());
+        communityResponseDTO.setMembersCount(community.getUsers().size());
         return communityResponseDTO;
     }
 

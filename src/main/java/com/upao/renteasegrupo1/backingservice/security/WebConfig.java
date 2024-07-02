@@ -1,4 +1,5 @@
-package com.upao.renteasegrupo1.backingservice.config;
+package com.upao.renteasegrupo1.backingservice.security;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class IntegrationConfig implements Filter{
+public class WebConfig implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,7 +26,7 @@ public class IntegrationConfig implements Filter{
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
-       /** response.setHeader("Access-Control-Allow-Origin", "LINK DESPLIEGUE DEL FRONT");**/
+        /** response.setHeader("Access-Control-Allow-Origin", "LINK DESPLIEGUE DEL FRONT");**/
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, HEAD, PATCH");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, credential, X-XSRF-TOKEN");
@@ -42,5 +43,4 @@ public class IntegrationConfig implements Filter{
     public void destroy() {
         // TODO Auto-generated method stub
     }
-
 }
