@@ -55,11 +55,7 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-        <dependency>
-            <groupId>com.upao.renteasegrupo1</groupId>
-            <artifactId>backing-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
 
 
 		<dependency>
@@ -91,7 +87,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.2.23</version>
+			<version>42.5.0</version>
 		</dependency>
 
 
