@@ -14,7 +14,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17
 
 # Exponer el puerto que utilizará la aplicación
-EXPOSE 8080
+EXPOSE 8081
 
 # Copiar el archivo JAR construido desde la etapa anterior
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /app/demo-0.0.1-SNAPSHOT.jar
