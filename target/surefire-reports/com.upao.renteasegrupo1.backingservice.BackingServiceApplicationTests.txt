@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.upao.renteasegrupo1.backingservice.BackingServiceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.445 s -- in com.upao.renteasegrupo1.backingservice.BackingServiceApplicationTests
